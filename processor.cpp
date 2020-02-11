@@ -31,24 +31,41 @@ Computer::Processor::Processor(const std::string & filename)
   /*================================
     READ IN DATA TO CORRECT CLASSES, shrinking the vector as we go
   ==================================*/
+  //Number of instructions in a process
   int num_instr = 0;
-  int TEST_total = 0;
+  //Will be passed in to each process' constructor
+  vector<Instruction> vec_instr;
+  //Holds most granular value, the value of an instruction in a process
+  int instr_val = 0;
+
   for(int i=numProcesses; i>0; i--)
   {
-    cout<<"Total: "<<TEST_total<<endl;
-    TEST_total = 0;
     num_instr = raw_process_data[raw_process_data.size() -1];
     raw_process_data.pop_back();
-    cout<<endl<<"Loop: "<<num_instr<<endl;
+
     for(int q=0; q<num_instr; q++)
     {
-      cout<<"Val: "<<raw_process_data[raw_process_data.size() -1]<<endl;
-      TEST_total += raw_process_data[raw_process_data.size() -1];
+      instr_val = raw_process_data[raw_process_data.size() -1];
+      //Add instructions to vec_instr
+      vec_instr.push_back(Instruction(instr_val));
       raw_process_data.pop_back();
     }
-  }
 
-  cout<<"That should be all"<<endl;
+    //Create a process, then push that process into our processor's queue
+    processQueue.emplace(Process(vec_instr));
+    vec_instr.clear();
+  }
+  cout<<"That should be all of the data to read in."<<endl;
+
+
+
+
+  // TESTING BELOW
+  
+  // TESTING ABOVE
+
+
+
 
 }
 

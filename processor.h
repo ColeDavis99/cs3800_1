@@ -30,6 +30,8 @@ namespace Computer
 
       //Process queue, holds all processes until their instruction count reaches zero.
       queue<Process> processQueue;
+
+      //Vector of
     public:
       // Constructor with filename of input file
       Processor(const std::string & filename);
