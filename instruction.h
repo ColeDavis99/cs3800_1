@@ -15,7 +15,7 @@ namespace Computer
    */
   class Instruction
   {
-  public:
+  private:
       // total time to process this instruction
       unsigned long timeToProcess;
       // the current amount of time processed so far

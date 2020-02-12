@@ -131,7 +131,6 @@ Processor& Processor::operator=(const Processor & copy)
 // Start the Processor
 void Computer::Processor::Start()
 {
-  cout<<"Still need to implement processor::Start()."<<endl;
-  
-  
+	processQueue.front().ProcessUnit(41);
+	cout<<processQueue.front()<<endl;
 }
