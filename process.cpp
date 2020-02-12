@@ -46,7 +46,17 @@ bool ProcessUnit(unsigned long pu)
 }
 
 
+// gets remaining time to process instructions
+unsigned long RemainingInstructionTime() const
+{
+  
+}
 
+// gets remaining time to process instructions
+unsigned long RemainingInstructionTime() const
+{
+
+}
 
 //BROKEN << OVERLOAD OPERATOR BELOW
 // Ostream to print a process
@@ -54,6 +64,6 @@ bool ProcessUnit(unsigned long pu)
 std::ostream & Computer::operator<<(std::ostream& out, const Process& p)
 {
   cout << "WIZZER" << endl;
-  
+
   return out;
 }

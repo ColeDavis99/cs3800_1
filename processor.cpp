@@ -58,10 +58,6 @@ Computer::Processor::Processor(const std::string & filename)
   }
   //cout<<"That should be all of the data to read in."<<endl;
 
-
-  cout<<processQueue.front()<<endl;
-
-
   // TESTING BELOW
   // cout<<endl<<endl<<"LETS LOOP THROUGH QUEUE"<<endl;
   // while (!processQueue.empty())

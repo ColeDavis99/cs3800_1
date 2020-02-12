@@ -65,8 +65,8 @@ namespace Computer
       bool ProcessUnit(unsigned long pu);
       // gets remaining time to process instructions
       unsigned long RemainingInstructionTime() const;
-      // gets the total time needed to process all instructions
-      unsigned long TotalInstructionTime() const;
+      // gets remaining time to process instructions
+      unsigned long RemainingInstructionTime() const;
   };
 
   // Needed in order to be able to do the extraction operator
