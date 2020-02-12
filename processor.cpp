@@ -1,7 +1,6 @@
 #include "processor.h"
 using namespace Computer;
 
-
 // Constructor with filename of input file
 Computer::Processor::Processor(const std::string & filename)
 {
@@ -55,10 +54,12 @@ Computer::Processor::Processor(const std::string & filename)
     //Create a process, then push that process into our processor's queue
     processQueue.emplace(Process(vec_instr));
     vec_instr.clear();
+
   }
   //cout<<"That should be all of the data to read in."<<endl;
 
 
+  cout<<processQueue.front()<<endl;
 
 
   // TESTING BELOW
@@ -101,19 +102,34 @@ Computer::Processor::Processor(const Processor & copy)
 }
 
 
-// Copy Assignment Operator (update me this as member vars are added to processor class)
- Processor& Computer::Processor::operator=(const Processor & copy)
-{
-  seed = copy.seed;
 
-  //cout<<copy.processQueue.front().instructions[0];
+// Copy Assignment Operator (NOT TESTED)
+Processor& Processor::operator=(const Processor & copy)
+{
+  seed = copy.Seed();
+
+  //Delete the queue to be replaced
+  while (!processQueue.empty())
+  {
+    processQueue.pop();
+  }
+
+  //Now re-fill the queue with the new values
+  queue<Process> temp = copy.processQueue;
+  for(unsigned int i=0; i<temp.size(); i++)
+  {
+    processQueue.push(temp.front());
+    temp.pop();
+  }
 
   //Yay, we're doing shallow copy
   // cout<<"lhs: "<<seed<<"  "<<&seed<<endl;
   // cout<<"rhs: "<<copy.seed<<"  "<<&copy.seed<<endl<<endl;
   // cout<<"lhs: "<<seed<<"  "<<&seed<<endl;
   // cout<<"rhs: "<<copy.seed<<"  "<<&copy.seed<<endl;
+  return *this;
 }
+
 
 
 // Start the Processor
