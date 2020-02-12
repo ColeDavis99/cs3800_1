@@ -4,15 +4,17 @@ using namespace Computer;
 // Constructor with list of instructions
 Computer::Process::Process(const std::vector<Instruction> & inst)
 {
-  //THIS SHOULD BE A SHALLOW COPY, NEED TO TEST ME STILL. &inst is by reference
+  //Make shallow copy of inst
   instructions = vector<Instruction> (inst);
-
-  //cout<<"*instructions: "<<&instructions<<"  inst: "<<&inst<<endl;
 }
 
 
 // Copy Constructor
 Computer::Process::Process(const Process & copy)
 {
-  cout<<"Im a copy constructor"<<endl<<endl;
+  //processIds = copy.processIds  //Do we touch static vars?
+  id = copy.id;
+  processState = copy.processState;
+  instructions = copy.instructions;
+  currInstruction = copy.currInstruction;
 }

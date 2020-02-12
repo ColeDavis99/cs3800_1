@@ -10,11 +10,24 @@
 // DO NOT MODIFY THIS FILE
 int main(int argc, char** argv)
 {
-  // Check for file name command line argument 
+
+  //Testing below
+  // Computer::Processor a(argv[1]);
+  // Computer::Processor b(a);
+
+
+  //Testing above
+
+
+
+
+  //BELOW IS THE STUFF I SHOULDNT HAVE TOUCHED
+
+  // Check for file name command line argument
   if(argc != 2)
   {
-    throw std::invalid_argument("No input file given");
-  }
+  throw std::invalid_argument("No input file given");
+}
 
   // construct the processor
   Computer::Processor p(argv[1]);
@@ -22,6 +35,6 @@ int main(int argc, char** argv)
   srand(p.Seed());
   // start the processor
   p.Start();
-  
+
   return 0;
 }

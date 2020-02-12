@@ -9,13 +9,13 @@
 namespace Computer
 {
   // DO NOT MODIFY THIS FILE
-  /* 
+  /*
    * Instruction class
    * Purpose: represent an instruction and its process time
    */
   class Instruction
   {
-    private:
+  private:
       // total time to process this instruction
       unsigned long timeToProcess;
       // the current amount of time processed so far

@@ -19,7 +19,7 @@ namespace Computer
   // Process class
   class Process
   {
-    private:
+  private:
       // static var to keep track of current ids
       static unsigned long processIds;
       // current Processes id

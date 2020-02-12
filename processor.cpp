@@ -15,9 +15,9 @@ Computer::Processor::Processor(const std::string & filename)
   while (fin >> num)
     raw_process_data.push_back(num);
 
-  cout << "count = " << raw_process_data.size() << endl;
-  cout << "seed = " << raw_process_data[0] << endl;
-  cout << "numProcesses = " << raw_process_data[1] << endl;
+  // cout << "count = " << raw_process_data.size() << endl;
+  // cout << "seed = " << raw_process_data[0] << endl;
+  // cout << "numProcesses = " << raw_process_data[1] << endl;
 
   //One time value reads
   seed = raw_process_data[0];
@@ -28,9 +28,10 @@ Computer::Processor::Processor(const std::string & filename)
   raw_process_data.pop_back(); // Lil chop 1 of 2
   raw_process_data.pop_back(); // Lil chop 2 of 2
 
-  /*================================
+
+  /*==============================================================
     READ IN DATA TO CORRECT CLASSES, shrinking the vector as we go
-  ==================================*/
+  ================================================================*/
   //Number of instructions in a process
   int num_instr = 0;
   //Will be passed in to each process' constructor
@@ -55,24 +56,68 @@ Computer::Processor::Processor(const std::string & filename)
     processQueue.emplace(Process(vec_instr));
     vec_instr.clear();
   }
-  cout<<"That should be all of the data to read in."<<endl;
+  //cout<<"That should be all of the data to read in."<<endl;
 
 
 
 
   // TESTING BELOW
-  
+  // cout<<endl<<endl<<"LETS LOOP THROUGH QUEUE"<<endl;
+  // while (!processQueue.empty())
+  // {
+  //  cout<<endl<<"Here's a process"<<endl;
+  //  cout<<"Num instructions: "<<processQueue.front().NumInstructions()<<endl;
+  //  cout<<"ProcessID: "<<processQueue.front().id<<endl;
+  //
+  //  for(int e=0; e<processQueue.front().instructions.size(); e++)
+  //  {
+  //    cout<<"instruction "<<e<<": "<<processQueue.front().instructions[e].timeToProcess<<endl;
+  //  }
+  //
+  //  processQueue.pop();
+  // }
   // TESTING ABOVE
-
-
-
-
 }
 
+
+// Copy Constructor
+Computer::Processor::Processor(const Processor & copy)
+{
+  cout<<"Processor copy const"<<endl;
+  seed = copy.seed;
+
+  //Loop through queue to shallow copy
+  queue<Process> temp = copy.processQueue;
+  for(unsigned int i=0; i<copy.processQueue.size(); i++)
+  {
+    processQueue.push(temp.front());
+    // cout<<"Pushing another process with instructions: "<<endl;
+    // for(int q=0; q<temp.front().instructions.size(); q++)
+    // {
+    //   cout<<temp.front().instructions[q].timeToProcess<<endl;
+    // }
+    temp.pop();
+  }
+}
+
+
+// Copy Assignment Operator (update me this as member vars are added to processor class)
+ Processor& Computer::Processor::operator=(const Processor & copy)
+{
+  seed = copy.seed;
+
+  //cout<<copy.processQueue.front().instructions[0];
+
+  //Yay, we're doing shallow copy
+  // cout<<"lhs: "<<seed<<"  "<<&seed<<endl;
+  // cout<<"rhs: "<<copy.seed<<"  "<<&copy.seed<<endl<<endl;
+  // cout<<"lhs: "<<seed<<"  "<<&seed<<endl;
+  // cout<<"rhs: "<<copy.seed<<"  "<<&copy.seed<<endl;
+}
 
 
 // Start the Processor
 void Computer::Processor::Start()
 {
-  cout<<"Processor started up!"<<endl;
+  cout<<"Still need to implement processor::Start()."<<endl;
 }

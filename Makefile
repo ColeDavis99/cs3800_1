@@ -13,5 +13,9 @@ run:
 	${CXX} ${FLAGS} *.cpp ${LIBRARIES} -o program
 	./program sample_input.dat
 
+run2:
+	${CXX} ${FLAGS} *.cpp ${LIBRARIES} -o program
+	./program sample_input.dat sample_input2.dat
+
 clean:
 	-@rm -rf *.o program core
