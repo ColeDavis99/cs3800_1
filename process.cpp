@@ -49,6 +49,7 @@ bool Process::ProcessUnit(unsigned long pu)
 {
 	StartProcessing();
 	
+	
 	//Keep processing only if we have pu's left to use, AND there's still instructions left to process
 	while(pu > 0 && instructions.size() > 0)
 	{
@@ -95,7 +96,7 @@ unsigned long Process::TotalInstructionTime() const
 {
 	unsigned long originalTime = 0;
 	//Loop through the vector and return sum of all of instruction 
-	for(int i=0; i<instructions.size(); i++)
+	for(int i=0; i<instructions.size() +1; i++)
 	{
 		originalTime += instructions[i].ProcessTime();
 	}
@@ -107,6 +108,6 @@ unsigned long Process::TotalInstructionTime() const
 // Ostream to print a process
 std::ostream & Computer::operator<<(std::ostream& out, const Process& p)
 {
-  cout << "Process - " << p.processIds << ": "<< p.NumInstructionsLeft() << " " <<p.RemainingInstructionTime() << "/" << p.TotalInstructionTime()<<endl;
+  cout << "Process - ID: " << p.processIds << " instr's left: "<< p.NumInstructionsLeft() << "  Remaining time: " <<p.RemainingInstructionTime() << " Total time: " << p.TotalInstructionTime()<<endl;
   return out;
 }
