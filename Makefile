@@ -10,6 +10,7 @@ compile:
 	${CXX} ${FLAGS} *.cpp ${LIBRARIES} -o program
 
 run:
+	clear && clear
 	${CXX} ${FLAGS} *.cpp ${LIBRARIES} -o program
 	./program sample_input.dat
 

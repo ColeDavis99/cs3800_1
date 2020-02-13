@@ -1,23 +1,34 @@
 #include "processor.h"
 using namespace Computer;
 
+
 //Static variable scope enable
 unsigned long Process::processIds=0;
 
 
+//Default constructor
+Process::Process()
+{
+  id=processIds;
+  processIds++;
+  processState = NotRunning;
+  currInstruction = 0;
+}
 
 // Constructor with list of instructions
 Process::Process(const std::vector<Instruction> & inst)
 {
   //Make shallow copy of inst
+  id=processIds;
   instructions = vector<Instruction> (inst);
+  currInstruction = 0;
+  processIds++;
 }
 
 
 // Copy Constructor
 Process::Process(const Process & copy)
 {
-  //processIds = copy.processIds  //Do we touch static vars?
   id = copy.id;
   processState = copy.processState;
   instructions = copy.instructions;
@@ -47,33 +58,30 @@ void Process::StopProcessing()
 // returns whether or not it finished, this processes instructions in a process
 bool Process::ProcessUnit(unsigned long pu)
 {
-	StartProcessing();
-	
-	
-	//Keep processing only if we have pu's left to use, AND there's still instructions left to process
-	while(pu > 0 && instructions.size() > 0)
-	{
-		pu = instructions.back().Process(pu);
-		
-		//We just completed a single instuction
-		if(pu > 0)
-			instructions.pop_back();
-	}
+  StartProcessing();
 
-	StopProcessing();
-	
-	
-	//We've got some extra pu's left and have finished processing all instructions
-	if(pu > 0)
-		return true;
-		
-	//Exactly the amount of pu's needed to complete the process was given  
-	else if(pu == 0 && instructions.size() == 0)
-		return true;
-	
-	//The process did not complete
-	else
-		return false;
+  cout<<"Process - "<<this->Id()<<" processing..."<<endl;
+
+  //Keep processing only if we have pu's left to use, AND there's still instructions left to process
+  while(currInstruction < instructions.size() && pu > 0)
+  {
+    pu = instructions[currInstruction].Process(pu);
+
+    if(instructions[currInstruction].TimeLeft() <= 0)
+      currInstruction++;
+  }
+
+  StopProcessing();
+
+
+  //We had more pu's passed in than was needed to complete the process
+  if(pu > 0)
+    return true;
+
+  //Check the last element in the instruction vector to see if the whole process needs more pu's to be completed
+  else if(instructions[instructions.size()-1].TimeLeft() > 0)
+    return false;
+
 }
 
 
@@ -81,26 +89,24 @@ bool Process::ProcessUnit(unsigned long pu)
 unsigned long Process::RemainingInstructionTime() const
 {
 	unsigned long remainingProcessTime = 0;
+
 	//Loop through the vector and return sum of all of instruction objects remaining time
-	for(int i=0; i<instructions.size(); i++)
-	{
+  for(int i=0; i<instructions.size(); i++)
 		remainingProcessTime += instructions[i].TimeLeft();
-	}
-	
+
 	return remainingProcessTime;
 }
 
 
-// gets the total time that was needed to process all intructions when process was first created
+// Gets the number of pu's needed to complete the process
 unsigned long Process::TotalInstructionTime() const
 {
 	unsigned long originalTime = 0;
-	//Loop through the vector and return sum of all of instruction 
-	for(int i=0; i<instructions.size() +1; i++)
-	{
+
+	//Loop through the vector and return sum of all of instruction
+	for(int i=0; i<instructions.size(); i++)
 		originalTime += instructions[i].ProcessTime();
-	}
-	
+
 	return originalTime;
 }
 
@@ -108,6 +114,7 @@ unsigned long Process::TotalInstructionTime() const
 // Ostream to print a process
 std::ostream & Computer::operator<<(std::ostream& out, const Process& p)
 {
-  cout << "Process - ID: " << p.processIds << " instr's left: "<< p.NumInstructionsLeft() << "  Remaining time: " <<p.RemainingInstructionTime() << " Total time: " << p.TotalInstructionTime()<<endl;
+  cout << "Process - " << p.id << ": " << p.NumInstructionsLeft() << " " << p.RemainingInstructionTime() << "/" << p.TotalInstructionTime();
+
   return out;
 }

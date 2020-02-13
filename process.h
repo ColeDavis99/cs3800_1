@@ -66,7 +66,7 @@ namespace Computer
       // gets remaining time to process instructions
       unsigned long RemainingInstructionTime() const;
       // gets the total time needed to profcess all intructions
-      unsigned long TotalInstructionTime() const; 
+      unsigned long TotalInstructionTime() const;
   };
 
   // Needed in order to be able to do the extraction operator

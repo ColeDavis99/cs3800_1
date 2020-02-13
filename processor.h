@@ -29,6 +29,8 @@ namespace Computer
       unsigned long seed;
       //Process queue, holds all processes until their instruction count reaches zero.
       queue<Process> processQueue;
+      //Holds the (up to) three processes to be ran on the threads
+      vector<Process> processHolder;
 
     public:
       // Constructor with filename of input file

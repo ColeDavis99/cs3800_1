@@ -4,7 +4,6 @@ using namespace Computer;
 // Constructor with filename of input file
 Computer::Processor::Processor(const std::string & filename)
 {
-  cout<<"Processor constructor called"<<endl;
 
   //Read in ALL of the process info into a vector
   ifstream fin(filename);
@@ -56,24 +55,7 @@ Computer::Processor::Processor(const std::string & filename)
     vec_instr.clear();
 
   }
-  //cout<<"That should be all of the data to read in."<<endl;
-
-  // TESTING BELOW
-  // cout<<endl<<endl<<"LETS LOOP THROUGH QUEUE"<<endl;
-  // while (!processQueue.empty())
-  // {
-  //  cout<<endl<<"Here's a process"<<endl;
-  //  cout<<"Num instructions: "<<processQueue.front().NumInstructions()<<endl;
-  //  cout<<"ProcessID: "<<processQueue.front().id<<endl;
-  //
-  //  for(int e=0; e<processQueue.front().instructions.size(); e++)
-  //  {
-  //    cout<<"instruction "<<e<<": "<<processQueue.front().instructions[e].timeToProcess<<endl;
-  //  }
-  //
-  //  processQueue.pop();
-  // }
-  // TESTING ABOVE
+  fin.close();
 }
 
 
@@ -131,6 +113,81 @@ Processor& Processor::operator=(const Processor & copy)
 // Start the Processor
 void Computer::Processor::Start()
 {
-	processQueue.front().ProcessUnit(41);
-	cout<<processQueue.front()<<endl;
+  unsigned long pu = 0;
+
+
+  //This is the main driver for the program.
+  while(processQueue.size() > 0)
+  {
+    processHolder.clear();
+    pu = rand() % 100 + 1;
+    cout<<endl<<"----- "<<pu<<" Pus ------"<<endl;
+
+    //This is very storage inefficient, but it's too late to change my decision to use a queue.
+    queue<Process> coutQueue = processQueue;
+    for(int i=0; i<processQueue.size(); i++)
+    {
+      cout<<coutQueue.front()<<endl;
+      coutQueue.pop();
+    }
+
+
+
+
+
+    //Now execute 1,2, or 3 processes from the "queue" processHolder (it's actually a vector)
+    if(processQueue.size() == 1)
+    {
+      processHolder.push_back(processQueue.front()); //1 of 1
+      processQueue.pop();
+      if(! processHolder[0].ProcessUnit(pu))
+      {
+        processQueue.push(processHolder[0]);
+      }
+
+    }
+    else if(processQueue.size() == 2)
+    {
+      processHolder.push_back(processQueue.front());  //1 of 2
+      processQueue.pop();
+      if(! processHolder[0].ProcessUnit(pu))
+      {
+        processQueue.push(processHolder[0]);
+      }
+      processHolder.push_back(processQueue.front());  //2 of 2
+      processQueue.pop();
+      if(! processHolder[0].ProcessUnit(pu))
+      {
+        processQueue.push(processHolder[1]);
+      }
+
+    }
+    else if(processQueue.size() >= 3)
+    {
+      processHolder.push_back(processQueue.front());  //1 of 1
+      processQueue.pop();
+      if(! processHolder[0].ProcessUnit(pu))
+      {
+        processQueue.push(processHolder[0]);
+      }
+
+      processHolder.push_back(processQueue.front());  //2 of 2
+      processQueue.pop();
+      if(! processHolder[1].ProcessUnit(pu))
+      {
+        processQueue.push(processHolder[1]);
+      }
+
+      processHolder.push_back(processQueue.front());  //3 of 3
+      processQueue.pop();
+      if(! processHolder[2].ProcessUnit(pu))
+      {
+        processQueue.push(processHolder[2]);
+      }
+
+
+    }
+    else
+      cout<<"processHolder is too big I bet. It should only hold three"<<endl;
+  }
 }
