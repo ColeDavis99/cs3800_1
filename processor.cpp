@@ -121,7 +121,7 @@ void Computer::Processor::Start()
   {
     processHolder.clear();
     pu = rand() % 100 + 1;
-    cout<<endl<<"----- "<<pu<<" Pus ------"<<endl;
+    cout<<"----- "<<pu<<" Pus ------"<<endl;
 
     //This is very storage inefficient, but it's too late to change my decision to use a queue.
     queue<Process> coutQueue = processQueue;
@@ -138,16 +138,19 @@ void Computer::Processor::Start()
     //Now execute 1,2, or 3 processes from the "queue" processHolder (it's actually a vector)
     if(processQueue.size() == 1)
     {
+      cout<<endl;
+
       processHolder.push_back(processQueue.front()); //1 of 1
       processQueue.pop();
       if(! processHolder[0].ProcessUnit(pu))
       {
         processQueue.push(processHolder[0]);
       }
-
     }
     else if(processQueue.size() == 2)
     {
+      cout<<endl;
+
       processHolder.push_back(processQueue.front());  //1 of 2
       processQueue.pop();
       if(! processHolder[0].ProcessUnit(pu))
@@ -164,6 +167,8 @@ void Computer::Processor::Start()
     }
     else if(processQueue.size() >= 3)
     {
+      cout<<endl;
+
       processHolder.push_back(processQueue.front());  //1 of 1
       processQueue.pop();
       if(! processHolder[0].ProcessUnit(pu))
