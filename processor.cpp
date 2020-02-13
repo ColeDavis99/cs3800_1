@@ -158,7 +158,7 @@ void Computer::Processor::Start()
 
       //Join the threads back
       threadVec[0].join();
-      
+
       //Check and see if the process got finished
       if(! processHolder[0].Finished())
         processQueue.push(processHolder[0]);
@@ -189,8 +189,7 @@ void Computer::Processor::Start()
 
       if(! processHolder[1].Finished())
         processQueue.push(processHolder[1]);
-
-
+        
 
     }
     else if(processQueue.size() >= 3)
@@ -219,24 +218,18 @@ void Computer::Processor::Start()
 
       //Check and see if the process got finished
       if(! processHolder[0].Finished())
-      {
-        cout << processHolder[0].RemainingInstructionTime() << endl;
         processQueue.push(processHolder[0]);
-      }
+
 
 
       if(! processHolder[1].Finished())
-      {
-        cout << processHolder[1].RemainingInstructionTime() << endl;
         processQueue.push(processHolder[1]);
-      }
+
 
 
       if(! processHolder[2].Finished())
-      {
-        cout << processHolder[2].RemainingInstructionTime() << endl;
         processQueue.push(processHolder[2]);
-      }
+
 
 
     }
