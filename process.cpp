@@ -94,6 +94,7 @@ unsigned long Process::RemainingInstructionTime() const
   for(int i=0; i<instructions.size(); i++)
 		remainingProcessTime += instructions[i].TimeLeft();
 
+
 	return remainingProcessTime;
 }
 
@@ -115,6 +116,17 @@ unsigned long Process::TotalInstructionTime() const
 std::ostream & Computer::operator<<(std::ostream& out, const Process& p)
 {
   cout << "Process - " << p.id << ": " << p.NumInstructionsLeft() << " " << p.RemainingInstructionTime() << "/" << p.TotalInstructionTime();
-
   return out;
+}
+
+
+//Copy Assignment operator
+Process& Process::operator=(const Process & copy)
+{
+  id = copy.id;
+  processState = copy.processState;
+  instructions.clear();
+  instructions = copy.instructions;
+  currInstruction = copy.currInstruction;
+  return *this;
 }

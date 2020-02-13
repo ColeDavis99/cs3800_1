@@ -115,11 +115,9 @@ void Computer::Processor::Start()
 {
 
   //std::thread(&<class>::<member function>, std::ref(<class instance>), ...args);
-  //vector<std::thread> threadVec();
-
+  std::vector<std::thread> threadVec;
   unsigned long pu = 0;
-
-
+  queue<Process> coutQueue;
 
   /*===================================
     Prepare for next run cycle
@@ -127,81 +125,120 @@ void Computer::Processor::Start()
   //This is the main driver for the program.
   while(processQueue.size() > 0)
   {
+    threadVec.clear();
+
     //Generate random PU value
     processHolder.clear();
     pu = rand() % 100 + 1;
     cout<<"----- "<<pu<<" Pus ------"<<endl;
 
     //This is very storage inefficient, but it's too late to change my decision to use a queue.
-    queue<Process> coutQueue = processQueue;
+    coutQueue = processQueue;
     for(int i=0; i<processQueue.size(); i++)
     {
       cout<<coutQueue.front()<<endl;
       coutQueue.pop();
     }
 
-    //Create a vector of threads
 
-
-
-
-    /*===================================
-        Execute next run cycle
-    ==================================*/
+    /*=========================================================================================================================================
+        Execute next run cycle (I've got three hardcodey cases depending on the number of processes left in the queue. 1,2, or 3 processes.)
+    ========================================================================================================================================*/
     //Now execute 1,2, or 3 processes from the "queue" processHolder (it's actually a vector)
     if(processQueue.size() == 1)
     {
-      cout<<endl;
+      cout<<endl; //Match output format
 
-      processHolder.push_back(processQueue.front()); //1 of 1
+      //Get the processes we need to run
+      processHolder.push_back(processQueue.front());  //1 of 1 processes added to be processed
       processQueue.pop();
-      if(! processHolder[0].ProcessUnit(pu))
-      {
+
+      //Run the threads
+      threadVec.push_back(std::thread(&Process::ProcessUnit,std::ref(processHolder[0]), pu));
+
+      //Join the threads back
+      threadVec[0].join();
+      
+      //Check and see if the process got finished
+      if(! processHolder[0].Finished())
         processQueue.push(processHolder[0]);
-      }
+
     }
     else if(processQueue.size() == 2)
     {
-      cout<<endl;
+      cout<<endl; //Match output format
 
-      processHolder.push_back(processQueue.front());  //1 of 2
+      //Get the processes we need to run
+      processHolder.push_back(processQueue.front());  //1 of 2 processes added to be processed
       processQueue.pop();
-      if(! processHolder[0].ProcessUnit(pu))
-      {
+      processHolder.push_back(processQueue.front());  //2 of 2 processes added to be processed
+      processQueue.pop();
+
+
+      //Run the threads
+      threadVec.push_back(std::thread(&Process::ProcessUnit,std::ref(processHolder[0]), pu));
+      threadVec.push_back(std::thread(&Process::ProcessUnit,std::ref(processHolder[1]), pu));
+
+      //Join the threads back
+      threadVec[0].join();
+      threadVec[1].join();
+
+      //Check and see if the process got finished
+      if(! processHolder[0].Finished())
         processQueue.push(processHolder[0]);
-      }
-      processHolder.push_back(processQueue.front());  //2 of 2
-      processQueue.pop();
-      if(! processHolder[0].ProcessUnit(pu))
-      {
+
+      if(! processHolder[1].Finished())
         processQueue.push(processHolder[1]);
-      }
+
+
 
     }
     else if(processQueue.size() >= 3)
     {
-      cout<<endl;
+      cout<<endl; //Match output format
 
-      processHolder.push_back(processQueue.front());  //1 of 1
+      //Get the processes we need to run
+      processHolder.push_back(processQueue.front());  //1 of 3 processes added to be processed
       processQueue.pop();
-      if(! processHolder[0].ProcessUnit(pu))
+      processHolder.push_back(processQueue.front());  //2 of 3 processes added to be processed
+      processQueue.pop();
+      processHolder.push_back(processQueue.front());  //3 of 3 processes added to be processed
+      processQueue.pop();
+
+      //Run the threads
+      threadVec.push_back(std::thread(&Process::ProcessUnit,std::ref(processHolder[0]), pu));
+      threadVec.push_back(std::thread(&Process::ProcessUnit,std::ref(processHolder[1]), pu));
+      threadVec.push_back(std::thread(&Process::ProcessUnit,std::ref(processHolder[2]), pu));
+
+
+      //Join the threads back
+      threadVec[0].join();
+      threadVec[1].join();
+      threadVec[2].join();
+
+
+      //Check and see if the process got finished
+      if(! processHolder[0].Finished())
       {
+        cout << processHolder[0].RemainingInstructionTime() << endl;
         processQueue.push(processHolder[0]);
       }
 
-      processHolder.push_back(processQueue.front());  //2 of 2
-      processQueue.pop();
-      if(! processHolder[1].ProcessUnit(pu))
+
+      if(! processHolder[1].Finished())
       {
+        cout << processHolder[1].RemainingInstructionTime() << endl;
         processQueue.push(processHolder[1]);
       }
 
-      processHolder.push_back(processQueue.front());  //3 of 3
-      processQueue.pop();
-      if(! processHolder[2].ProcessUnit(pu))
+
+      if(! processHolder[2].Finished())
       {
+        cout << processHolder[2].RemainingInstructionTime() << endl;
         processQueue.push(processHolder[2]);
       }
+
+
     }
     else
       cout<<"processHolder is too big I bet. It should only hold three"<<endl;
