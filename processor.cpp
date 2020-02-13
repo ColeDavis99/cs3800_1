@@ -113,12 +113,21 @@ Processor& Processor::operator=(const Processor & copy)
 // Start the Processor
 void Computer::Processor::Start()
 {
+
+  //std::thread(&<class>::<member function>, std::ref(<class instance>), ...args);
+  //vector<std::thread> threadVec();
+
   unsigned long pu = 0;
 
 
+
+  /*===================================
+    Prepare for next run cycle
+  ==================================*/
   //This is the main driver for the program.
   while(processQueue.size() > 0)
   {
+    //Generate random PU value
     processHolder.clear();
     pu = rand() % 100 + 1;
     cout<<"----- "<<pu<<" Pus ------"<<endl;
@@ -131,10 +140,14 @@ void Computer::Processor::Start()
       coutQueue.pop();
     }
 
+    //Create a vector of threads
 
 
 
 
+    /*===================================
+        Execute next run cycle
+    ==================================*/
     //Now execute 1,2, or 3 processes from the "queue" processHolder (it's actually a vector)
     if(processQueue.size() == 1)
     {
@@ -189,8 +202,6 @@ void Computer::Processor::Start()
       {
         processQueue.push(processHolder[2]);
       }
-
-
     }
     else
       cout<<"processHolder is too big I bet. It should only hold three"<<endl;
